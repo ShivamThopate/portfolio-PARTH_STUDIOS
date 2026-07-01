@@ -1,0 +1,1027 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Parth Dharashivkar — Editor · Cinematographer · Colorist</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=Inter:wght@300;400;500&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --black:   #0A0A0A;
+      --dark:    #111111;
+      --surface: #181818;
+      --border:  #2A2A2A;
+      --muted:   #666666;
+      --warm:    #F0EDE6;
+      --amber:   #C8963E;
+      --amber-d: #A07830;
+      --white:   #FFFFFF;
+      --hero-video-offset: 8vh; /* nudge down to keep faces in frame */
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--black);
+      color: var(--warm);
+      font-family: 'Inter', sans-serif;
+      font-weight: 300;
+      font-size: 16px;
+      line-height: 1.7;
+      overflow-x: hidden;
+    }
+
+    /* ── NAV ─────────────────────────────────────────────── */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 24px 48px;
+      background: linear-gradient(to bottom, rgba(10,10,10,0.95) 0%, transparent 100%);
+      transition: background 0.3s;
+    }
+    nav.scrolled {
+      background: rgba(10,10,10,0.97);
+      border-bottom: 1px solid var(--border);
+    }
+    .nav-logo {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.15rem;
+      font-weight: 500;
+      letter-spacing: 0.08em;
+      color: var(--warm);
+      text-decoration: none;
+    }
+    .nav-links {
+      display: flex;
+      gap: 36px;
+      list-style: none;
+    }
+    .nav-links a {
+      font-size: 0.78rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--muted);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+    .nav-links a:hover { color: var(--warm); }
+
+    /* ── HERO ─────────────────────────────────────────────── */
+    #hero {
+      position: relative;
+      height: 100vh;
+      min-height: 600px;
+      display: flex;
+      align-items: flex-end;
+      justify-content: flex-start;
+      overflow: hidden;
+      padding: 0 48px 72px;
+    }
+
+    /* Hero Background Video setup */
+    .hero-video-wrap {
+      position: absolute;
+      inset: 0;
+      z-index: 0;
+      background: var(--black);
+      pointer-events: none;
+      overflow: hidden;
+    }
+    .hero-video-wrap iframe,
+    .hero-bg-video {
+      position: absolute;
+      top: 0;
+      left: 50%;
+      width: 100vw;
+      height: 56.25vw; /* 16:9 ratio */
+      min-height: 100vh;
+      min-width: 177.77vh; /* 16:9 ratio */
+      transform: translateX(-50%) translateY(var(--hero-video-offset)) scale(1.5);
+      transform-origin: top center;
+      border: none;
+      z-index: 1;
+      opacity: 0.6;
+    }
+
+    .hero-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(
+        to top,
+        rgba(10,10,10,0.92) 0%,
+        rgba(10,10,10,0.35) 50%,
+        rgba(10,10,10,0.10) 100%
+      );
+      z-index: 4;
+      pointer-events: none;
+    }
+    .hero-content {
+      position: relative;
+      z-index: 5;
+      max-width: 720px;
+    }
+    .hero-name {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(3.2rem, 7vw, 6rem);
+      font-weight: 300;
+      line-height: 1.0;
+      letter-spacing: -0.01em;
+      color: var(--white);
+      margin-bottom: 20px;
+    }
+    .hero-sub {
+      font-size: 0.9rem;
+      color: rgba(240,237,230,0.65);
+      letter-spacing: 0.04em;
+      max-width: 440px;
+      line-height: 1.8;
+    }
+    .hero-cta {
+      margin-top: 36px;
+      display: inline-block;
+      padding: 14px 32px;
+      border: 1px solid var(--amber);
+      color: var(--amber);
+      font-size: 0.75rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      text-decoration: none;
+      transition: background 0.25s, color 0.25s;
+    }
+    .hero-cta:hover {
+      background: var(--amber);
+      color: var(--black);
+    }
+
+    /* ── SECTION BASE ─────────────────────────────────────── */
+    section {
+      padding: 100px 48px;
+    }
+    .section-label {
+      font-size: 0.68rem;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--amber);
+      margin-bottom: 48px;
+    }
+    h2 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(2.2rem, 4vw, 3.4rem);
+      font-weight: 300;
+      line-height: 1.15;
+      letter-spacing: -0.01em;
+      color: var(--white);
+    }
+
+    /* ── SHOWREEL ─────────────────────────────────────────── */
+    #showreel {
+      background: var(--dark);
+      text-align: center;
+    }
+    #showreel h2 { margin-bottom: 48px; }
+
+    .reel-wrap {
+      position: relative;
+      max-width: 900px;
+      margin: 0 auto;
+      aspect-ratio: 16/9;
+      background: var(--surface);
+      cursor: pointer;
+    }
+    /* Poster overlay for showreel */
+    .reel-poster-wrap {
+      position: absolute;
+      inset: 0;
+      z-index: 2;
+      transition: opacity 0.4s;
+    }
+    .reel-poster-wrap.hidden { opacity: 0; pointer-events: none; }
+    .reel-poster-wrap img {
+      width: 100%; height: 100%;
+      object-fit: cover;
+    }
+    .reel-play-btn {
+      position: absolute;
+      top: 50%; left: 50%;
+      transform: translate(-50%, -50%);
+      width: 80px; height: 80px;
+      border-radius: 50%;
+      background: rgba(200,150,62,0.15);
+      border: 1.5px solid var(--amber);
+      display: flex; align-items: center; justify-content: center;
+      cursor: pointer;
+      transition: background 0.25s;
+    }
+    .reel-play-btn:hover { background: rgba(200,150,62,0.35); }
+    .reel-play-btn svg { margin-left: 5px; }
+
+    .reel-iframe-wrap {
+      position: absolute;
+      inset: 0;
+      z-index: 1;
+    }
+    .reel-iframe-wrap iframe {
+      width: 100%; height: 100%; border: none;
+    }
+
+    /* ── ABOUT ────────────────────────────────────────────── */
+    #about {
+      background: var(--black);
+    }
+    .about-inner {
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+    .about-grid {
+      display: grid;
+      grid-template-columns: 1fr 1.6fr;
+      gap: 80px;
+      align-items: start;
+      margin-top: 16px;
+    }
+    .about-left h2 { margin-bottom: 24px; }
+    .about-stats {
+      margin-top: 40px;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+    .stat {
+      border-top: 1px solid var(--border);
+      padding-top: 16px;
+    }
+    .stat-num {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 2.4rem;
+      font-weight: 300;
+      color: var(--amber);
+      line-height: 1;
+    }
+    .stat-label {
+      font-size: 0.75rem;
+      letter-spacing: 0.1em;
+      color: var(--muted);
+      margin-top: 4px;
+    }
+    .about-right p {
+      font-size: 1.05rem;
+      line-height: 1.9;
+      color: rgba(240,237,230,0.8);
+      margin-bottom: 20px;
+    }
+    .about-disciplines {
+      margin-top: 36px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+    .discipline-tag {
+      padding: 6px 16px;
+      border: 1px solid var(--border);
+      font-size: 0.72rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+
+    /* ── WORK ─────────────────────────────────────────────── */
+    #work { background: var(--dark); }
+    .work-header {
+      max-width: 1100px;
+      margin: 0 auto 56px;
+    }
+    .work-grid {
+      max-width: 1100px;
+      margin: 0 auto;
+      column-count: 3;
+      column-gap: 24px;
+    }
+    .work-item {
+      position: relative;
+      background: var(--surface);
+      overflow: hidden;
+      cursor: pointer;
+      margin-bottom: 24px;
+      break-inside: avoid;
+    }
+    .work-item video,
+    .work-item img {
+      width: 100%; height: auto;
+      display: block;
+      pointer-events: none;
+      transition: transform 0.5s ease, filter 0.4s ease;
+      filter: brightness(0.75) saturate(0.85);
+    }
+    .work-item:hover video,
+    .work-item:hover img {
+      transform: scale(1.04);
+      filter: brightness(0.55) saturate(0.7);
+    }
+    .work-item-overlay {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      padding: 24px;
+      background: linear-gradient(to top, rgba(10,10,10,0.88) 0%, transparent 60%);
+      opacity: 0;
+      transition: opacity 0.35s;
+    }
+    .work-item:hover .work-item-overlay { opacity: 1; }
+    .work-item-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.25rem;
+      font-weight: 400;
+      color: var(--white);
+      margin-bottom: 4px;
+    }
+    .work-item-role {
+      font-size: 0.68rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--amber);
+    }
+    .work-placeholder {
+      width: 100%; height: 100%;
+      background: var(--surface);
+      display: flex; align-items: center; justify-content: center;
+    }
+    .work-placeholder span {
+      font-size: 0.65rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--border);
+    }
+
+    /* ── SERVICES ─────────────────────────────────────────── */
+    #services { background: var(--black); }
+    .services-inner { max-width: 1100px; margin: 0 auto; }
+    .services-inner h2 { margin-bottom: 56px; }
+    .services-list {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 2px;
+    }
+    .service-card {
+      background: var(--surface);
+      padding: 40px 36px;
+      transition: background 0.25s;
+    }
+    .service-card:hover { background: #1e1e1e; }
+    .service-icon { font-size: 1.5rem; margin-bottom: 20px; display: block; }
+    .service-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.55rem;
+      font-weight: 400;
+      color: var(--white);
+      margin-bottom: 12px;
+    }
+    .service-desc {
+      font-size: 0.88rem;
+      color: rgba(240,237,230,0.55);
+      line-height: 1.8;
+    }
+
+    /* ── CONTACT ──────────────────────────────────────────── */
+    #contact { background: var(--dark); text-align: center; }
+    #contact h2 { margin-bottom: 16px; }
+    .contact-sub {
+      font-size: 1rem;
+      color: var(--muted);
+      margin-bottom: 56px;
+      max-width: 440px;
+      margin-left: auto; margin-right: auto;
+    }
+    .contact-links {
+      display: flex;
+      justify-content: center;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+    .contact-link {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+      padding: 28px 36px;
+      border: 1px solid var(--border);
+      text-decoration: none;
+      transition: border-color 0.25s, background 0.25s;
+      min-width: 180px;
+    }
+    .contact-link:hover {
+      border-color: var(--amber);
+      background: rgba(200,150,62,0.05);
+    }
+    .contact-link-label {
+      font-size: 0.65rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+    .contact-link-value { font-size: 0.88rem; color: var(--warm); }
+
+    /* ── FOOTER ───────────────────────────────────────────── */
+    footer {
+      padding: 28px 48px;
+      border-top: 1px solid var(--border);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.72rem;
+      color: var(--muted);
+      letter-spacing: 0.06em;
+    }
+
+    /* ── VIDEO MODAL ──────────────────────────────────────── */
+    #videoModal {
+      position: fixed;
+      inset: 0;
+      z-index: 1000;
+      background: rgba(10, 10, 10, 0.95);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s ease;
+    }
+    #videoModal.active {
+      opacity: 1;
+      pointer-events: auto;
+    }
+    .modal-close {
+      position: absolute;
+      top: 32px;
+      right: 48px;
+      background: none;
+      border: none;
+      color: var(--white);
+      font-size: 2.5rem;
+      font-weight: 300;
+      cursor: pointer;
+      z-index: 1001;
+      transition: color 0.2s;
+    }
+    .modal-close:hover {
+      color: var(--amber);
+    }
+    .modal-video-container {
+      width: 90%;
+      max-width: 1200px;
+      aspect-ratio: 16/9;
+      background: #000;
+      position: relative;
+    }
+    .modal-video-container iframe,
+    .modal-video-container video {
+      width: 100%;
+      height: 100%;
+      border: none;
+    }
+
+    /* ── MOBILE MENU STYLES ───────────────────────────────── */
+    .hamburger {
+      display: none;
+      flex-direction: column;
+      justify-content: space-between;
+      width: 32px;
+      height: 20px;
+      background: transparent;
+      border: none;
+      cursor: pointer;
+      z-index: 105;
+      padding: 4px 0;
+    }
+    .hamburger span {
+      width: 100%;
+      height: 1.5px;
+      background: var(--warm);
+      transition: all 0.3s ease;
+      pointer-events: none;
+    }
+    .hamburger.active span:nth-child(1) {
+      transform: translateY(8px) rotate(45deg);
+    }
+    .hamburger.active span:nth-child(2) {
+      opacity: 0;
+    }
+    .hamburger.active span:nth-child(3) {
+      transform: translateY(-8px) rotate(-45deg);
+    }
+
+    .mobile-menu {
+      position: fixed;
+      inset: 0;
+      z-index: 104;
+      background: rgba(10, 10, 10, 0.98);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.4s ease;
+    }
+    .mobile-menu.active {
+      opacity: 1;
+      pointer-events: auto;
+    }
+    .mobile-nav-links {
+      list-style: none;
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      gap: 40px;
+    }
+    .mobile-nav-links a {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 2.5rem;
+      color: var(--white);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+    .mobile-nav-links a:hover { color: var(--amber); }
+
+    /* ── RESPONSIVE ───────────────────────────────────────── */
+    @media (max-width: 768px) {
+      nav { padding: 16px 24px; }
+      .nav-links { display: none; }
+      .hamburger { display: flex; }
+      
+      #hero { padding: 0 24px 56px; }
+      .hero-name { font-size: clamp(2.8rem, 12vw, 4rem); }
+      section { padding: 72px 24px; }
+      .about-grid { grid-template-columns: 1fr; gap: 40px; }
+      .work-grid { column-count: 1; }
+      .work-item.wide { grid-column: span 1; }
+      .services-list { grid-template-columns: 1fr; }
+      footer { flex-direction: column; gap: 16px; text-align: center; }
+      .contact-links { flex-direction: column; align-items: center; }
+      .contact-link { width: 100%; min-width: unset; }
+      .modal-video-container { width: 100%; aspect-ratio: 16/9; }
+      .modal-close { top: 16px; right: 24px; font-size: 2rem; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      * { transition: none !important; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ── NAV ───────────────────────────────────────────────── -->
+<nav id="navbar">
+  <a href="#hero" class="nav-logo">Parth Dharashivkar</a>
+  
+  <ul class="nav-links">
+    <li><a href="#showreel">Reel</a></li>
+    <li><a href="#work">Work</a></li>
+    <li><a href="#about">About</a></li>
+    <li><a href="#services">Services</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+
+  <!-- Mobile Hamburger -->
+  <button class="hamburger" id="hamburgerBtn" aria-label="Toggle menu">
+    <span></span>
+    <span></span>
+    <span></span>
+  </button>
+</nav>
+
+<!-- ── MOBILE MENU OVERLAY ───────────────────────────────── -->
+<div class="mobile-menu" id="mobileMenu">
+  <ul class="mobile-nav-links">
+    <li><a href="#showreel" onclick="closeMobileMenu()">Reel</a></li>
+    <li><a href="#work" onclick="closeMobileMenu()">Work</a></li>
+    <li><a href="#about" onclick="closeMobileMenu()">About</a></li>
+    <li><a href="#services" onclick="closeMobileMenu()">Services</a></li>
+    <li><a href="#contact" onclick="closeMobileMenu()">Contact</a></li>
+  </ul>
+</div>
+
+<!-- ── HERO ──────────────────────────────────────────────── -->
+<section id="hero">
+  <div class="hero-video-wrap">
+    <iframe src="https://www.youtube-nocookie.com/embed/m-dJeHzjJjk?autoplay=1&mute=1&loop=1&playlist=m-dJeHzjJjk&controls=0&showinfo=0&rel=0&modestbranding=1&iv_load_policy=3&playsinline=1" allow="autoplay; encrypted-media"></iframe>
+  </div>
+  <div class="hero-overlay"></div>
+  <div class="hero-content">
+    <h1 class="hero-name">Parth<br>Dharashivkar</h1>
+    <p class="hero-sub">Editor · Cinematographer · Colorist<br>
+    Story-driven films that challenge creativity and leave a mark.</p>
+    <a href="#work" class="hero-cta">View Work</a>
+  </div>
+</section>
+
+<!-- ── SHOWREEL ───────────────────────────────────────────── -->
+<section id="showreel">
+  <p class="section-label">Showreel</p>
+  <h2>The Work, Distilled</h2>
+  <br>
+  <div class="reel-wrap" id="reelWrap">
+    <div class="reel-poster-wrap" id="reelPosterWrap">
+      <img src="assets/AADAT%20a%20shortfilm_preview.jpg" alt="Showreel Thumbnail Placeholder">
+      <div class="reel-play-btn" onclick="loadReelVideo()" aria-label="Play showreel">
+        <svg width="26" height="26" viewBox="0 0 24 24" fill="var(--amber)">
+          <polygon points="5,3 19,12 5,21"/>
+        </svg>
+      </div>
+    </div>
+    <!-- The showreel video will load here when clicked -->
+    <div class="reel-iframe-wrap" id="reelIframeWrap"></div>
+  </div>
+</section>
+
+<!-- ── WORK ───────────────────────────────────────────────── -->
+<section id="work">
+  <div class="work-header">
+    <p class="section-label">Selected Work</p>
+    <h2>Projects</h2>
+  </div>
+  <div class="work-grid">
+    
+
+    <div class="work-item" data-video-src="assets/1st%20glimpse%20ps%20KLR%20x%20str8bat.mp4" onclick="openWorkModal(this)">
+      <video src="assets/1st%20glimpse%20ps%20KLR%20x%20str8bat_preview.mp4" autoplay loop muted playsinline></video>
+      
+      <div class="work-item-overlay">
+        <p class="work-item-title">1st glimpse ps KLR x str8bat</p>
+        <p class="work-item-role">Editor / Cinematographer</p>
+      </div>
+    </div>
+
+    <div class="work-item" data-video-src="assets/Crocs%20x%20KLR%20BTS%20film%20.mp4" onclick="openWorkModal(this)">
+      <video src="assets/Crocs%20x%20KLR%20BTS%20film%20_preview.mp4" autoplay loop muted playsinline></video>
+      
+      <div class="work-item-overlay">
+        <p class="work-item-title">Crocs x KLR BTS film </p>
+        <p class="work-item-role">Editor / Cinematographer</p>
+      </div>
+    </div>
+    <div class="work-item" data-video-src="assets/Dish%20explanation%20for%20Dimora.mp4" onclick="openWorkModal(this)">
+      <video src="assets/Dish%20explanation%20for%20Dimora_preview.mp4" autoplay loop muted playsinline></video>
+      
+      <div class="work-item-overlay">
+        <p class="work-item-title">Dish explanation for Dimora</p>
+        <p class="work-item-role">Editor / Cinematographer</p>
+      </div>
+    </div>
+    <div class="work-item" data-video-src="assets/Documentary%20for%20MB%20x%20David.mp4" onclick="openWorkModal(this)">
+      <video src="assets/Documentary%20for%20MB%20x%20David_preview.mp4" autoplay loop muted playsinline></video>
+      
+      <div class="work-item-overlay">
+        <p class="work-item-title">Documentary for MB x David</p>
+        <p class="work-item-role">Editor / Cinematographer</p>
+      </div>
+    </div>
+
+    <div class="work-item" data-video-src="assets/Gharsoaps%20promotional%20ads%20.mp4" onclick="openWorkModal(this)">
+      <video src="assets/Gharsoaps%20promotional%20ads%20_preview.mp4" autoplay loop muted playsinline></video>
+      
+      <div class="work-item-overlay">
+        <p class="work-item-title">Gharsoaps promotional ads </p>
+        <p class="work-item-role">Editor / Cinematographer</p>
+      </div>
+    </div>
+    <div class="work-item" data-video-src="assets/Grade%20for%20G-shock%20.mp4" onclick="openWorkModal(this)">
+      <video src="assets/Grade%20for%20G-shock%20_preview.mp4" autoplay loop muted playsinline></video>
+      
+      <div class="work-item-overlay">
+        <p class="work-item-title">Grade for G-shock </p>
+        <p class="work-item-role">Editor / Cinematographer</p>
+      </div>
+    </div>
+    <div class="work-item" data-video-src="assets/Indian%20Aeropress%20championship%20Event%20video.mp4" onclick="openWorkModal(this)">
+      <video src="assets/Indian%20Aeropress%20championship%20Event%20video_preview.mp4" autoplay loop muted playsinline></video>
+      
+      <div class="work-item-overlay">
+        <p class="work-item-title">Indian Aeropress championship Event video</p>
+        <p class="work-item-role">Editor / Cinematographer</p>
+      </div>
+    </div>
+    <div class="work-item" data-video-src="assets/Johnny%20lever%20x%20Gharsoaps%20BTS%20film.mp4" onclick="openWorkModal(this)">
+      <video src="assets/Johnny%20lever%20x%20Gharsoaps%20BTS%20film_preview.mp4" autoplay loop muted playsinline></video>
+      
+      <div class="work-item-overlay">
+        <p class="work-item-title">Johnny lever x Gharsoaps BTS film</p>
+        <p class="work-item-role">Editor / Cinematographer</p>
+      </div>
+    </div>
+    <div class="work-item" data-video-src="assets/KLR%20socialmedia%20work.mp4" onclick="openWorkModal(this)">
+      <video src="assets/KLR%20socialmedia%20work_preview.mp4" autoplay loop muted playsinline></video>
+      
+      <div class="work-item-overlay">
+        <p class="work-item-title">KLR socialmedia work</p>
+        <p class="work-item-role">Editor / Cinematographer</p>
+      </div>
+    </div>
+    <div class="work-item" data-video-src="assets/Nescafe%20spec%20ad.MP4" onclick="openWorkModal(this)">
+      <video src="assets/Nescafe%20spec%20ad_preview.mp4" autoplay loop muted playsinline></video>
+      
+      <div class="work-item-overlay">
+        <p class="work-item-title">Nescafe spec ad</p>
+        <p class="work-item-role">Editor / Cinematographer</p>
+      </div>
+    </div>
+    <div class="work-item" data-video-src="assets/Rohit%20sharma%20x%20Gharsoaps%20BTS%20film.mp4" onclick="openWorkModal(this)">
+      <video src="assets/Rohit%20sharma%20x%20Gharsoaps%20BTS%20film_preview.mp4" autoplay loop muted playsinline></video>
+      
+      <div class="work-item-overlay">
+        <p class="work-item-title">Rohit sharma x Gharsoaps BTS film</p>
+        <p class="work-item-role">Editor / Cinematographer</p>
+      </div>
+    </div>
+    <div class="work-item" data-video-src="assets/S1000rr%20delivery%20video%20.mp4" onclick="openWorkModal(this)">
+      <video src="assets/S1000rr%20delivery%20video%20_preview.mp4" autoplay loop muted playsinline></video>
+      
+      <div class="work-item-overlay">
+        <p class="work-item-title">S1000rr delivery video </p>
+        <p class="work-item-role">Editor / Cinematographer</p>
+      </div>
+    </div>
+    <div class="work-item" data-video-src="assets/Social%20media%20content%20for%20Dimora.mp4" onclick="openWorkModal(this)">
+      <video src="assets/Social%20media%20content%20for%20Dimora_preview.mp4" autoplay loop muted playsinline></video>
+      
+      <div class="work-item-overlay">
+        <p class="work-item-title">Social media content for Dimora</p>
+        <p class="work-item-role">Editor / Cinematographer</p>
+      </div>
+    </div>
+
+    <div class="work-item" data-video-src="assets/Teaser%20for%20KLR%20x%20str8bat.mp4" onclick="openWorkModal(this)">
+      <video src="assets/Teaser%20for%20KLR%20x%20str8bat_preview.mp4" autoplay loop muted playsinline></video>
+      
+      <div class="work-item-overlay">
+        <p class="work-item-title">Teaser for KLR x str8bat</p>
+        <p class="work-item-role">Editor / Cinematographer</p>
+      </div>
+    </div>
+
+    <div class="work-item" data-video-src="assets/Ace%20blend%20reel%20project.mp4" onclick="openWorkModal(this)">
+      <img src="assets/Ace%20blend%20reel%20project_preview.jpg" alt="Preview">
+      
+      <div class="work-item-overlay">
+        <p class="work-item-title">Ace blend reel project</p>
+        <p class="work-item-role">Editor / Cinematographer</p>
+      </div>
+    </div>
+
+    <div class="work-item" data-video-src="assets/Spotify%20spec%20Ad%20film%20.mp4" onclick="openWorkModal(this)">
+      <img src="assets/Spotify%20spec%20Ad%20film%20_preview.jpg" alt="Preview">
+      
+      <div class="work-item-overlay">
+        <p class="work-item-title">Spotify spec Ad film</p>
+        <p class="work-item-role">Editor / Cinematographer</p>
+      </div>
+    </div>
+
+    <div class="work-item" data-video-src="assets/uniqulo%20low-res%20.mp4" onclick="openWorkModal(this)">
+      <img src="assets/UNIQLO%20x%20Roshni%20Chopra_preview.jpg" alt="Preview">
+      
+      <div class="work-item-overlay">
+        <p class="work-item-title">UNIQLO x Roshni Chopra</p>
+        <p class="work-item-role">Editor / Cinematographer</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── ABOUT ──────────────────────────────────────────────── -->
+<section id="about">
+  <div class="about-inner">
+    <div class="about-grid">
+      <div class="about-left">
+        <p class="section-label">About</p>
+        <h2>Storytelling<br><em>is the craft.</em></h2>
+        <div class="about-stats">
+          <div class="stat">
+            <div class="stat-num">4</div>
+            <div class="stat-label">Years of experience</div>
+          </div>
+          <div class="stat">
+            <div class="stat-num">3</div>
+            <div class="stat-label">Core disciplines</div>
+          </div>
+          <div class="stat">
+            <div class="stat-num">∞</div>
+            <div class="stat-label">Open to work, anywhere</div>
+          </div>
+        </div>
+      </div>
+      <div class="about-right">
+        <p>
+          I'm Parth — an editor, cinematographer, and colorist working with clients
+          across the world. Four years in, and what still drives me is the same thing
+          it always was: a film that actually has something to say.
+        </p>
+        <p>
+          I'm drawn to story-based work — the kind that challenges me creatively,
+          where the edit isn't just assembly but a decision about how an audience
+          feels at every cut. Whether I'm shooting, grading, or building a sequence
+          in the timeline, I bring the same approach: clean, intentional, and built
+          around what the story needs.
+        </p>
+        <p>
+          I work with premium brands, independent filmmakers, and anyone serious
+          about the quality of what they put out into the world.
+        </p>
+        <div class="about-disciplines">
+          <span class="discipline-tag">Video Editing</span>
+          <span class="discipline-tag">Color Grading</span>
+          <span class="discipline-tag">Cinematography</span>
+          <span class="discipline-tag">Sound Design</span>
+          <span class="discipline-tag">DaVinci Resolve</span>
+          <span class="discipline-tag">Premiere Pro</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── SERVICES ───────────────────────────────────────────── -->
+<section id="services">
+  <div class="services-inner">
+    <p class="section-label">What I Do</p>
+    <h2>Services</h2>
+    <div class="services-list">
+      <div class="service-card">
+        <span class="service-icon">✂</span>
+        <p class="service-title">Video Editing</p>
+        <p class="service-desc">
+          Narrative-driven cuts for short films, brand films, Instagram reels, and ad campaigns.
+          Pacing, rhythm, and structure — not just assembly.
+        </p>
+      </div>
+      <div class="service-card">
+        <span class="service-icon">◐</span>
+        <p class="service-title">Color Grading</p>
+        <p class="service-desc">
+          Cinematic color work in DaVinci Resolve. From primary correction to full looks —
+          SDR, HDR, and platform-ready delivery.
+        </p>
+      </div>
+      <div class="service-card">
+        <span class="service-icon">⬡</span>
+        <p class="service-title">Cinematography</p>
+        <p class="service-desc">
+          Camera and lighting for brand films, short films, and commercial shoots.
+          Clean, considered framing with a visual language built for the story.
+        </p>
+      </div>
+      <div class="service-card">
+        <span class="service-icon">◎</span>
+        <p class="service-title">Sound Design</p>
+        <p class="service-desc">
+          Mix, music selection, and sound design that completes the picture.
+          Because what you hear is half of what you feel.
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── CONTACT ────────────────────────────────────────────── -->
+<section id="contact">
+  <p class="section-label">Get in Touch</p>
+  <h2>Let's Make Something</h2>
+  <p class="contact-sub">
+    Open to projects from anywhere in the world. Tell me what you're working on.
+  </p>
+  <div class="contact-links">
+    <a href="mailto:parthdharashivakrfilms@gmail.com" class="contact-link">
+      <span class="contact-link-label">Email</span>
+      <span class="contact-link-value">parthdharashivakrfilms@gmail.com</span>
+    </a>
+    <a href="tel:+918421862813" class="contact-link">
+      <span class="contact-link-label">Phone</span>
+      <span class="contact-link-value">+91 84218 62813</span>
+    </a>
+    <a href="https://www.instagram.com/parthdharashivkarfilms" target="_blank" rel="noopener" class="contact-link">
+      <span class="contact-link-label">Instagram</span>
+      <span class="contact-link-value">@parthdharashivkarfilms</span>
+    </a>
+  </div>
+</section>
+
+<!-- ── WORK VIDEO MODAL ───────────────────────────────────── -->
+<div id="videoModal">
+  <button class="modal-close" onclick="closeWorkModal()" aria-label="Close video">&times;</button>
+  <div class="modal-video-container" id="modalVideoContainer">
+    <!-- iframe or video will be injected here -->
+  </div>
+</div>
+
+<!-- ── FOOTER ─────────────────────────────────────────────── -->
+<footer>
+  <span>© 2026 Parth Dharashivkar</span>
+  <span>Open to work worldwide</span>
+</footer>
+
+<script>
+  // Nav scroll state
+  const nav = document.getElementById('navbar');
+  window.addEventListener('scroll', () => {
+    nav.classList.toggle('scrolled', window.scrollY > 60);
+  });
+
+  // Mobile Menu Logic
+  const hamburgerBtn = document.getElementById('hamburgerBtn');
+  const mobileMenu = document.getElementById('mobileMenu');
+
+  hamburgerBtn.addEventListener('click', () => {
+    hamburgerBtn.classList.toggle('active');
+    mobileMenu.classList.toggle('active');
+    document.body.style.overflow = mobileMenu.classList.contains('active') ? 'hidden' : '';
+  });
+
+  function closeMobileMenu() {
+    hamburgerBtn.classList.remove('active');
+    mobileMenu.classList.remove('active');
+    document.body.style.overflow = '';
+  }
+
+
+
+  // Showreel section: click poster → load iframe with autoplay
+  function loadReelVideo() {
+    const posterWrap = document.getElementById('reelPosterWrap');
+    const iframeWrap = document.getElementById('reelIframeWrap');
+    posterWrap.classList.add('hidden');
+    iframeWrap.innerHTML = `<video src="assets/aadat%20low-res%20.mp4" controls autoplay playsinline style="width: 100%; height: 100%; object-fit: contain; background: black; outline: none;"></video>`;
+  }
+
+  // Work Section: Modal logic
+  const videoModal = document.getElementById('videoModal');
+  const modalVideoContainer = document.getElementById('modalVideoContainer');
+
+  function openWorkModal(element) {
+    const videoSrc = element.getAttribute('data-video-src');
+    
+    // Quick validation to see if the user replaced the placeholder
+    if (!videoSrc || videoSrc === 'YOUR_YOUTUBE_ID_OR_VIDEO_URL_HERE') {
+      alert('Video placeholder! Add your actual YouTube link or video path in the HTML.');
+      return;
+    }
+    
+    let innerHtml = '';
+    
+    // Check if it's a YouTube link/ID or a direct video file
+    if (videoSrc.includes('youtube.com') || videoSrc.includes('youtu.be') || !videoSrc.includes('.')) {
+      // It's likely a YouTube ID or URL. Extract the ID if it's a URL.
+      let ytId = videoSrc;
+      if (videoSrc.includes('v=')) {
+        ytId = videoSrc.split('v=')[1].split('&')[0];
+      } else if (videoSrc.includes('youtu.be/')) {
+        ytId = videoSrc.split('youtu.be/')[1].split('?')[0];
+      }
+
+      innerHtml = `<iframe
+        src="https://www.youtube-nocookie.com/embed/${ytId}?autoplay=1&rel=0&modestbranding=1"
+        allow="autoplay; encrypted-media; fullscreen"
+        allowfullscreen>
+      </iframe>`;
+    } else {
+      // Assume it's a direct video file (e.g., .mp4)
+      innerHtml = `<video src="${videoSrc}" controls autoplay playsinline style="width:100%; height:100%; object-fit:contain; outline:none;"></video>`;
+    }
+
+    modalVideoContainer.innerHTML = innerHtml;
+    videoModal.classList.add('active');
+    
+    // Prevent background scrolling while modal is open
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closeWorkModal() {
+    videoModal.classList.remove('active');
+    
+    // Restore background scrolling
+    document.body.style.overflow = '';
+    
+    // Clear the inner HTML to stop the video from playing after fade out
+    setTimeout(() => {
+      modalVideoContainer.innerHTML = '';
+    }, 300);
+  }
+
+  // Close modal when clicking outside the video container
+  videoModal.addEventListener('click', (e) => {
+    if (e.target === videoModal) {
+      closeWorkModal();
+    }
+  });
+</script>
+
+</body>
+</html>
